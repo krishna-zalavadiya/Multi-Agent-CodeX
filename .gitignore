@@ -1,0 +1,116 @@
+# =========================
+
+# Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Python virtual environments
+
+venv/
+env/
+ENV/
+.pytest_cache/
+.pytest_cache
+.pyre/
+.mypy_cache/
+
+# Local Python environment folder
+
+py31/
+
+# =========================
+
+# Environment Variables
+
+# =========================
+
+.env
+.env.local
+.env.*.local
+
+# =========================
+
+# FastAPI / Logs
+
+# =========================
+
+*.log
+logs/
+uvicorn.log
+
+# =========================
+
+# Database Files
+
+# =========================
+
+*.sqlite3
+*.db
+
+# =========================
+
+# Celery / Redis
+
+# =========================
+
+celerybeat-schedule
+celerybeat.pid
+
+# =========================
+
+# Node / React
+
+# =========================
+
+frontend/node_modules/
+node_modules/
+
+# Build outputs
+
+dist/
+build/
+.vite/
+
+# =========================
+
+# VS Code
+
+# =========================
+
+.vscode/
+*.code-workspace
+
+# =========================
+
+# OS Files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# Testing
+
+# =========================
+
+.coverage
+htmlcov/
+
+# =========================
+
+# Temporary files
+
+# =========================
+
+*.tmp
+*.temp
+*.swp
+*~
