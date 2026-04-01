@@ -1,111 +1,535 @@
+/* ============================================================
+   INDEX.CSS — Global Design System
+   CodeSentinel | Dark Futuristic Theme
+   ============================================================ */
+
+/* -----------------------------------
+   1. CSS CUSTOM PROPERTIES (Design Tokens)
+   All colors, spacing, and effects reference these variables.
+   Changing them here updates the entire UI consistently.
+----------------------------------- */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Core Background Layers */
+  --bg-void: #05050a;          /* Deepest black — page background */
+  --bg-base: #09090f;          /* Base surface */
+  --bg-surface: #0e0e18;       /* Card / panel surfaces */
+  --bg-elevated: #13131f;      /* Elevated elements (dropdowns, modals) */
+  --bg-overlay: #1a1a2e;       /* Overlay panels */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Border Colors */
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-accent: rgba(99, 102, 241, 0.35);
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Primary Accent — Electric Indigo */
+  --accent-primary: #6366f1;
+  --accent-primary-dim: rgba(99, 102, 241, 0.15);
+  --accent-primary-glow: rgba(99, 102, 241, 0.4);
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  /* Agent Colors — each AI agent has its own identity */
+  --agent-bug: #f43f5e;              /* Rose — danger/bugs */
+  --agent-bug-dim: rgba(244, 63, 94, 0.12);
+  --agent-bug-glow: rgba(244, 63, 94, 0.35);
+
+  --agent-security: #f59e0b;         /* Amber — warning/security */
+  --agent-security-dim: rgba(245, 158, 11, 0.12);
+  --agent-security-glow: rgba(245, 158, 11, 0.35);
+
+  --agent-perf: #10b981;             /* Emerald — positive/performance */
+  --agent-perf-dim: rgba(16, 185, 129, 0.12);
+  --agent-perf-glow: rgba(16, 185, 129, 0.35);
+
+  /* Text Hierarchy */
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --text-disabled: rgba(255, 255, 255, 0.2);
+  --text-accent: #818cf8;            /* Indigo-400 for highlighted text */
+  --text-code: #7dd3fc;             /* Sky-300 — inline code snippets */
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', 'Fira Code', monospace;
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows & Glows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,0.6), 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-glow-accent: 0 0 24px var(--accent-primary-glow), 0 0 48px rgba(99,102,241,0.15);
+  --shadow-glow-bug: 0 0 20px var(--agent-bug-glow);
+  --shadow-glow-security: 0 0 20px var(--agent-security-glow);
+  --shadow-glow-perf: 0 0 20px var(--agent-perf-glow);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(14, 14, 24, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-blur: blur(16px);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* -----------------------------------
+   2. CSS RESET & BASE STYLES
+----------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* Subtle noise texture for premium depth */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  isolation: isolate; /* Creates a new stacking context */
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* -----------------------------------
+   3. CUSTOM SCROLLBAR — Dark, Minimal
+   Styled to match the overall aesthetic
+----------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-overlay);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-base);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-overlay) var(--bg-base);
+}
+
+/* -----------------------------------
+   4. TYPOGRAPHY UTILITIES
+----------------------------------- */
+.font-display  { font-family: var(--font-display); }
+.font-mono     { font-family: var(--font-mono); }
+
+.text-gradient-primary {
+  /* Main brand gradient — indigo to violet */
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-fire {
+  /* Bug agent — rose to orange */
+  background: linear-gradient(135deg, #fb7185 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-amber {
+  /* Security agent — amber to yellow */
+  background: linear-gradient(135deg, #fbbf24 0%, #fde68a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-emerald {
+  /* Performance agent — emerald to teal */
+  background: linear-gradient(135deg, #34d399 0%, #2dd4bf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* -----------------------------------
+   5. GLASSMORPHISM UTILITY CLASS
+   Use .glass on cards, navbars, modals
+----------------------------------- */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-strong {
+  background: rgba(9, 9, 15, 0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-default);
+}
+
+/* -----------------------------------
+   6. GLOW UTILITIES
+   Applied to buttons, icons, and accent elements
+----------------------------------- */
+.glow-accent  { box-shadow: var(--shadow-glow-accent); }
+.glow-bug     { box-shadow: var(--shadow-glow-bug); }
+.glow-security{ box-shadow: var(--shadow-glow-security); }
+.glow-perf    { box-shadow: var(--shadow-glow-perf); }
+
+/* Text glow variants */
+.text-glow-accent {
+  text-shadow: 0 0 20px rgba(99, 102, 241, 0.6), 0 0 40px rgba(99,102,241,0.3);
+}
+
+/* -----------------------------------
+   7. ANIMATED GRADIENT BACKGROUND
+   Used for hero sections and key panels
+----------------------------------- */
+.animated-bg {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(99,102,241,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(167,139,250,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(16,185,129,0.04) 0%, transparent 70%),
+    var(--bg-void);
+  background-size: 100% 100%, 100% 100%, 100% 100%, auto;
+  animation: bg-shift 12s ease-in-out infinite alternate;
+}
+
+@keyframes bg-shift {
+  0%   {
+    background-position: 20% -10%, 80% 110%, 50% 50%;
+  }
+  50%  {
+    background-position: 30% 0%, 70% 100%, 55% 45%;
+  }
+  100% {
+    background-position: 15% -5%, 85% 105%, 45% 55%;
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+/* -----------------------------------
+   8. KEYFRAME ANIMATIONS
+----------------------------------- */
+
+/* Fade up — used for staggered content entrance */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-p {
-  margin: 0;
+
+/* Fade in — simple opacity reveal */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
+/* Scale in — for badges and tags */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Slide in from left — for nav and sidebars */
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pulse glow — for active indicators and loading states */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--accent-primary-glow);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 24px var(--accent-primary-glow), 0 0 48px rgba(99,102,241,0.2);
+  }
+}
+
+/* Spin — loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Shimmer — skeleton loading effect */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Scan line — terminal/hacker aesthetic for hero */
+@keyframes scan-line {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Float — subtle levitation for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* Blink cursor — for typewriter effects */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* -----------------------------------
+   9. ANIMATION UTILITY CLASSES
+   Combine with Tailwind's animation utilities
+----------------------------------- */
+.animate-fade-up        { animation: fade-up 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+.animate-fade-in        { animation: fade-in 0.4s ease both; }
+.animate-scale-in       { animation: scale-in 0.3s var(--transition-spring) both; }
+.animate-float          { animation: float 4s ease-in-out infinite; }
+.animate-pulse-glow     { animation: pulse-glow 2.5s ease-in-out infinite; }
+.animate-spin-slow      { animation: spin 3s linear infinite; }
+.animate-blink          { animation: blink 1s step-end infinite; }
+
+/* Stagger delays for list items / cards */
+.stagger-1  { animation-delay: 0.05s; }
+.stagger-2  { animation-delay: 0.10s; }
+.stagger-3  { animation-delay: 0.15s; }
+.stagger-4  { animation-delay: 0.20s; }
+.stagger-5  { animation-delay: 0.25s; }
+.stagger-6  { animation-delay: 0.30s; }
+
+/* -----------------------------------
+   10. SHIMMER SKELETON LOADING
+   For results/cards while AI agents are running
+----------------------------------- */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-surface) 25%,
+    var(--bg-elevated) 50%,
+    var(--bg-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: var(--radius-md);
+}
+
+/* -----------------------------------
+   11. SCAN LINE OVERLAY
+   Decorative CRT-style effect for hero section
+   Apply .scanlines to any full-bleed container
+----------------------------------- */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Moving scan line that sweeps top to bottom */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(99, 102, 241, 0.04),
+    transparent
+  );
+  animation: scan-line 6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* -----------------------------------
+   12. GRID PATTERN BACKGROUND
+   Subtle dot/line grid for panels
+----------------------------------- */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.dot-pattern {
+  background-image: radial-gradient(
+    circle, rgba(255,255,255,0.06) 1px, transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+/* -----------------------------------
+   13. INTERACTIVE ELEMENT RESETS
+----------------------------------- */
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+}
+
+/* Focus visible — accessibility ring */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* -----------------------------------
+   14. SELECTION COLOR
+   Brand-tinted text selection
+----------------------------------- */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: var(--text-primary);
+}
+
+/* -----------------------------------
+   15. UTILITY: BORDER GLOW INSET
+   Subtle inner glow on card borders
+----------------------------------- */
+.border-glow {
+  box-shadow:
+    inset 0 0 0 1px var(--border-default),
+    inset 0 1px 0 rgba(255,255,255,0.07);
+}
+
+.border-glow-accent {
+  box-shadow:
+    inset 0 0 0 1px var(--border-accent),
+    0 0 16px rgba(99,102,241,0.12);
+}
+
+/* -----------------------------------
+   16. CODE BLOCK BASE STYLES
+   Used in ReviewResults for diff / snippet display
+----------------------------------- */
+pre, code {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+pre {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+}
+
+code:not(pre code) {
+  background: rgba(99,102,241,0.1);
+  color: var(--text-code);
+  padding: 0.15em 0.4em;
   border-radius: 4px;
-  color: var(--text-h);
+  font-size: 0.85em;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* -----------------------------------
+   17. RESPONSIVE CONTAINER
+----------------------------------- */
+.container-app {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+@media (max-width: 640px) {
+  .container-app {
+    padding-inline: var(--space-4);
+  }
 }

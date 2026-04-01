@@ -1,121 +1,159 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// ============================================================
+// App.jsx — Root Application Shell (FIXED)
+// Fixes: blank flash on mount, removed heavy backdrop stacking
+// ============================================================
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Review from "./pages/Review";
+import "./App.css";
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+// ------------------------------------------------------------
+// ScrollToTop — resets scroll on route change
+// ------------------------------------------------------------
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
 }
 
-export default App
+// ------------------------------------------------------------
+// AmbientBackground — FIXED:
+// - Removed backdrop-filter (was stacking with navbar blur)
+// - Used will-change: transform on orbs for GPU layer promotion
+// - Reduced orb opacity to cut compositing cost
+// - Single fixed background, no re-mount flicker
+// ------------------------------------------------------------
+function AmbientBackground() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position:      "fixed",
+        inset:         0,
+        pointerEvents: "none",
+        zIndex:        0,
+        overflow:      "hidden",
+      }}
+    >
+      {/* Orb 1 — indigo top-left */}
+      <div style={{
+        position:        "absolute",
+        width:           "700px",
+        height:          "700px",
+        top:             "-250px",
+        left:            "-200px",
+        borderRadius:    "50%",
+        background:      "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 65%)",
+        willChange:      "transform",
+        animation:       "float 16s ease-in-out infinite",
+      }} />
+
+      {/* Orb 2 — violet bottom-right */}
+      <div style={{
+        position:        "absolute",
+        width:           "600px",
+        height:          "600px",
+        bottom:          "-200px",
+        right:           "-150px",
+        borderRadius:    "50%",
+        background:      "radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 65%)",
+        willChange:      "transform",
+        animation:       "float 20s ease-in-out infinite",
+        animationDelay:  "-7s",
+      }} />
+
+      {/* Dot grid — static, no animation cost */}
+      <div style={{
+        position: "absolute",
+        inset:    0,
+        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        backgroundSize:  "28px 28px",
+      }} />
+    </div>
+  );
+}
+
+// ------------------------------------------------------------
+// NotFound page
+// ------------------------------------------------------------
+function NotFound() {
+  return (
+    <div style={{
+      display:        "flex",
+      flexDirection:  "column",
+      alignItems:     "center",
+      justifyContent: "center",
+      minHeight:      "80vh",
+      gap:            "1.5rem",
+    }}>
+      <div style={{
+        fontFamily:             "var(--font-display)",
+        fontSize:               "clamp(5rem,15vw,9rem)",
+        fontWeight:             800,
+        background:             "linear-gradient(135deg,#818cf8,#c084fc)",
+        WebkitBackgroundClip:   "text",
+        WebkitTextFillColor:    "transparent",
+        backgroundClip:         "text",
+        lineHeight:             1,
+      }}>
+        404
+      </div>
+      <p style={{ color: "var(--text-secondary)", fontFamily: "var(--font-body)" }}>
+        This page doesn't exist.
+      </p>
+      <a href="/" style={{
+        padding:      "0.6rem 1.4rem",
+        borderRadius: "9999px",
+        background:   "var(--accent-primary)",
+        color:        "#fff",
+        fontFamily:   "var(--font-body)",
+        fontSize:     "0.9rem",
+        textDecoration: "none",
+      }}>
+        ← Back to Home
+      </a>
+    </div>
+  );
+}
+
+// ------------------------------------------------------------
+// AppShell — NO PageTransition wrapper.
+// Page transitions were causing the blank flash because
+// React unmounts + remounts the entire page subtree on
+// every navigation. Simple opacity is handled in CSS instead.
+// ------------------------------------------------------------
+function AppShell() {
+  const location = useLocation();
+
+  return (
+    <div className="app-shell">
+      <AmbientBackground />
+      <Navbar />
+      <main className="app-main">
+        <ScrollToTop />
+        {/*
+          key on Routes causes full remount = blank flash.
+          Removed. CSS handles the fade via .app-main > * selector.
+        */}
+        <Routes location={location}>
+          <Route path="/"       element={<Home />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="*"       element={<NotFound />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AppShell />
+    </Router>
+  );
+}
