@@ -58,7 +58,7 @@ const AGENTS = [
 const FEATURES = [
   { icon:"⬡", title:"LangGraph Orchestration",  description:"Stateful multi-agent graph with conditional routing and shared memory across all review agents." },
   { icon:"⚡", title:"Parallel Analysis",         description:"All three agents run simultaneously — full review in seconds, not minutes." },
-  { icon:"🔬", title:"GPT-4o Powered",            description:"Each agent uses specialized prompting strategies tuned for its exact domain of expertise." },
+  { icon:"🔬", title:"Deepseek-coder-v2",            description:"Each agent uses specialized prompting strategies tuned for its exact domain of expertise." },
   { icon:"📦", title:"REST API Backend",          description:"FastAPI async endpoints handle code submission, polling, and structured result retrieval." },
   { icon:"🎯", title:"Python & JavaScript",       description:"Full support for both languages with language-aware analysis and context-sensitive suggestions." },
   { icon:"🐳", title:"Docker Ready",              description:"Containerized deployment with a single docker-compose up for local or cloud environments." },
@@ -305,7 +305,7 @@ export default function Home() {
                   background:"var(--accent-primary)", flexShrink:0,
                   animation:"pulse-glow 2.5s ease-in-out infinite",
                 }} aria-hidden="true" />
-                LangGraph · CrewAI · GPT-4o
+                LangGraph · CrewAI · Deepseek-coder-v2
               </span>
             </div>
 
@@ -344,7 +344,7 @@ export default function Home() {
             <div className="animate-fade-up" style={{ animationDelay:"0.22s", display:"flex", gap:"0.6rem", flexWrap:"wrap" }}>
               <StatPill value="3"        label="AI Agents"  color="var(--text-accent)" />
               <StatPill value="Parallel" label="Execution"  color="var(--agent-perf)" />
-              <StatPill value="GPT-4o"   label="Powered"    color="var(--agent-security)" />
+              <StatPill value="Deepseek-coder-v2"   label="Powered"    color="var(--agent-security)" />
             </div>
           </div>
 

@@ -17,7 +17,7 @@
 // const TECH_STACK = [
 //   { label: "LangGraph",  color: "var(--accent-primary)",  dim: "var(--accent-primary-dim)",  border: "var(--border-accent)" },
 //   { label: "CrewAI",     color: "var(--agent-perf)",      dim: "var(--agent-perf-dim)",      border: "rgba(16,185,129,0.25)" },
-//   { label: "GPT-4o",     color: "var(--agent-security)",  dim: "var(--agent-security-dim)",  border: "rgba(245,158,11,0.25)" },
+//   { label: "Deepseek-coder-v2",     color: "var(--agent-security)",  dim: "var(--agent-security-dim)",  border: "rgba(245,158,11,0.25)" },
 //   { label: "FastAPI",    color: "var(--agent-perf)",      dim: "var(--agent-perf-dim)",      border: "rgba(16,185,129,0.25)" },
 //   { label: "React",      color: "var(--text-accent)",     dim: "var(--accent-primary-dim)",  border: "var(--border-accent)" },
 //   { label: "Docker",     color: "var(--agent-bug)",       dim: "var(--agent-bug-dim)",       border: "rgba(244,63,94,0.25)" },

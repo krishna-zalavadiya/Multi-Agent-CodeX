@@ -287,7 +287,7 @@ export default function Review() {
             </h1>
             <p style={{ fontFamily:"var(--font-mono)", fontSize:"0.63rem", color:"var(--text-tertiary)",
               letterSpacing:"0.06em", marginTop:"0.1rem" }}>
-              3 agents · parallel execution · GPT-4o
+              3 agents · parallel execution · powered by Deepseek-coder-v2
             </p>
           </div>
 
