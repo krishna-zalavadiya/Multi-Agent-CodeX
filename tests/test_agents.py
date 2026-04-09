@@ -1,6 +1,6 @@
 import asyncio
 
-from app.agents.bug_agent import run_bug_detector, extract_json_from_response
+from backend.app.agents.bug_agent import run_bug_detector, extract_json_from_response
 
 
 # ==============================
