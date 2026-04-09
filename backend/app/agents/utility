@@ -1,0 +1,21 @@
+import httpx
+import json
+import re
+from app.config import settings
+
+class OllamaClient:
+    async def chat(self, messages):
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            response = await client.post(
+                f"{settings.OLLAMA_BASE_URL}/api/chat",
+                json={"model": settings.OLLAMA_MODEL, "stream": False, "messages": messages},
+            )
+            return response.json()
+
+def extract_json(text: str):
+    try:
+        text = re.sub(r"```json|```", "", text).strip()
+        start, end = text.find("{"), text.rfind("}") + 1
+        return json.loads(text[start:end])
+    except:
+        return {"findings": []}

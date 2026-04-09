@@ -1,80 +1,48 @@
 import asyncio
-from typing import Dict, Any
+from app.database import get_session
+from app.models import Review, ReviewStatus, Finding, FindingCategory
+from app.agents.bug_agent import run_bug_detector
+from app.agents.security_agent import run_security_analyst
+from app.agents.perf_agent import run_optimization_advisor
 
-from backend.app.agents.bug_agent import run_bug_detector
-from backend.app.agents.security_agent import run_security_analyst
-from backend.app.agents.perf_agent import run_optimization_advisor
+async def run_review_pipeline(review_id: str, code: str, language: str):
+    async with get_session() as db:
+        review = await db.get(Review, review_id)
+        if not review: return
+        
+        review.status = ReviewStatus.RUNNING
+        await db.commit()
 
-from backend.app.orchestrator.state import create_initial_state
+        try:
+            # Parallel Fan-out
+            results = await asyncio.gather(
+                run_bug_detector(code, language),
+                run_security_analyst(code, language),
+                run_optimization_advisor(code, language)
+            )
 
+            # Flatten and Save
+            all_findings = []
+            categories = [FindingCategory.BUG, FindingCategory.SECURITY, FindingCategory.PERFORMANCE]
+            
+            for i, result in enumerate(results):
+                for f in result.get("findings", []):
+                    new_f = Finding(
+                        review_id=review.id,
+                        category=categories[i],
+                        severity=f.get("severity", "low"),
+                        title=f.get("message", "Issue found"),
+                        description=f.get("message"),
+                        suggestion=f.get("suggestion"),
+                        line_number=f.get("line")
+                    )
+                    db.add(new_f)
+                    all_findings.append(new_f)
 
-# ==============================
-# Run All Agents in Parallel
-# ==============================
+            review.status = ReviewStatus.DONE
+            review.total_findings_count = len(all_findings)
+            await db.commit()
 
-async def run_agents(state):
-    code = state["code"]
-    language = state["language"]
-
-    results = await asyncio.gather(
-        run_bug_detector(code, language),
-        run_security_analyst(code, language),
-        run_optimization_advisor(code, language),
-    )
-
-    return results
-
-
-# ==============================
-# Aggregator (combine results)
-# ==============================
-
-def aggregate_results(results):
-    all_findings = []
-
-    for result in results:
-        findings = result.get("findings", [])
-        all_findings.extend(findings)
-
-    return all_findings
-
-
-# ==============================
-# Main Pipeline Entry
-# ==============================
-
-async def run_review_pipeline(
-    review_id: str,
-    code: str,
-    language: str
-) -> Dict[str, Any]:
-
-    state = create_initial_state(code, language)
-
-    try:
-        state["pipeline_status"] = "running"
-
-        # Run agents in parallel
-        results = await run_agents(state)
-
-        # Aggregate results
-        all_findings = aggregate_results(results)
-
-        state["findings"] = all_findings
-        state["pipeline_status"] = "done"
-
-        return {
-            "pipeline_status": state["pipeline_status"],
-            "total_findings_count": len(all_findings),
-            "error_message": "",
-        }
-
-    except Exception as e:
-        state["pipeline_status"] = "error"
-        state["error_message"] = str(e)
-
-        return {
-            "pipeline_status": "error",
-            "total_findings_count": 0,
-            "error_message": str(e),
-        }
+        except Exception as e:
+            review.status = ReviewStatus.ERROR
+            await db.commit()
